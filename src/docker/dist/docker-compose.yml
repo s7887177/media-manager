@@ -1,0 +1,12 @@
+name: mediam
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - mediam:/var/lib/postgresql/data
+volumes:
+  mediam:

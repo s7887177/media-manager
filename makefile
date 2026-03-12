@@ -1,6 +1,9 @@
 APP_NAME=mediam
 VERSION=1.0.1
+
 .PHONY: build
+chmod-scripts:
+	@chmod -R +x scripts
 build: 
 	@scripts/build.sh
 pack: build
@@ -8,3 +11,5 @@ pack: build
 	@tar -czvf releases/${VERSION}/${APP_NAME}-${VERSION}.tar.gz dist
 install: pack
 	@cat scripts/install.sh | sh -s -- releases/${VERSION}/${APP_NAME}-${VERSION}.tar.gz
+release: pack
+	@scripts/release.sh

@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+SCRIPT="$(readlink -f "$0")"
+DIR="$(dirname "$SCRIPT")"
+
+CMD="$1"
+cd $DIR
+set -a
+. ./package.env # BIN_PATH, INSTALL_DIR
+set +a
+shift || true
+
+case "$CMD" in
+up)
+  docker compose up -d "$@"
+  exit 0
+  ;;
+down)
+  docker compose down "$@"
+  exit 0
+  ;;
+uninstall)
+  echo "Stop running..."
+  docker compose down
+  echo "Uninstalling mediam..."
+
+  rm $BIN_PATH
+  rm -rf $INSTALL_DIR
+
+  echo "$BIN_PATH" | awk '{print "\033[90m" "- " $0 "\033[0m"}'
+  echo "$INSTALL_DIR" | awk '{print "\033[90m" "- " $0 "\033[0m"}'
+  
+  exit 0
+  ;;
+*)
+  echo "Usage: mediam (up|down)"
+  exit 1
+  ;;
+esac
